@@ -1,48 +1,62 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const axios = require('axios');
+const $ = require('jquery');
 require('./css/index.css');
 
 //React Router
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-const App = React.createClass({
-  render: function(){
+class App extends React.Component {
+  render(){
     return (
-      <Router>
-        <Switch>
-          <Route exact={true} path={'/'} component={MainComponent} />
-        </Switch>
-      </Router>
+      <div className="container">
+        <MainComponent />
+      </div>
+      // <Router>
+      //   <Switch>
+      //     <Route exact={true} path={'/'} component={MainComponent} />
+      //   </Switch>
+      // </Router>
     )
   }
-});
+}
 
-const MainComponent = React.createClass({
-  getInitialState: function(){
-    return {
+class MainComponent extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      imgUrl: '',
       articles: []
     }
-  },
-  render: function(){
+  }
+
+  render(){
     return (
-      <h1>Hello!</h1>
+      <h1>Star Wars</h1>
     )
-  },
-  componentWillMount: function(){
+  }
+
+  componentWillMount(){
     console.log('componentWillMount');
-  },
-  componentDidMount: function(){
+  }
+
+  componentDidMount(){
     console.log('componentDidMount');
     //any grabbing of external data
-    axios({
-      method: 'get',
-      url: 'https://newsapi.org/#apiArticles'
-    }).then(function(response){
-      console.log(response);
-    });
+    $.ajax({
+      url: 'https://swapi.co/api/films',
+      dataType: 'json',
+      jsonpCallback: 'callback',
+      type: 'GET',
+      success: function(data){
+        console.log(data);
+      },
+      // error: function(error){
+      //   console.log(error);
+      // }
+    })
   }
-});
-
+}
 
 ReactDOM.render(<App />, document.getElementById('app'));
